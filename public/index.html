@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Eren Kara — Dijital İkiz</title>
+  <style>
+    :root {
+      --bg: #f6f7f9; --panel: #ffffff; --text: #16181d; --muted: #6b7280;
+      --user: #2f5bea; --user-text: #ffffff; --bot: #eceef3; --border: #dfe2e8;
+      --error: #b3261e;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #0f1115; --panel: #171a21; --text: #e8eaee; --muted: #9aa1ad;
+        --user: #3b66f0; --bot: #232733; --border: #2a2f3b; --error: #f2877f;
+      }
+    }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; margin: 0; }
+    body {
+      background: var(--bg); color: var(--text);
+      font: 16px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      display: flex; justify-content: center;
+    }
+    main {
+      width: 100%; max-width: 720px; height: 100dvh;
+      display: flex; flex-direction: column; background: var(--panel);
+      border-left: 1px solid var(--border); border-right: 1px solid var(--border);
+    }
+    header { padding: 16px 20px; border-bottom: 1px solid var(--border); }
+    header h1 { margin: 0; font-size: 1.5rem; line-height: 1.25; }
+    header p { margin: 4px 0 0; color: var(--muted); font-size: 0.8rem; }
+    #log {
+      flex: 1; overflow-y: auto; padding: 16px 20px;
+      display: flex; flex-direction: column; gap: 10px;
+    }
+    .msg {
+      max-width: 85%; padding: 10px 14px; border-radius: 16px;
+      white-space: pre-wrap; overflow-wrap: anywhere;
+    }
+    .msg.assistant { background: var(--bot); align-self: flex-start; border-bottom-left-radius: 4px; }
+    .msg.user { background: var(--user); color: var(--user-text); align-self: flex-end; border-bottom-right-radius: 4px; }
+    .msg.error { color: var(--error); background: transparent; border: 1px solid var(--error); align-self: stretch; max-width: 100%; }
+    .msg.pending { color: var(--muted); font-style: italic; }
+    form { display: flex; gap: 8px; padding: 12px 20px; border-top: 1px solid var(--border); }
+    input {
+      flex: 1; min-width: 0; padding: 12px 14px; font-size: 16px; /* 16px stops iOS zoom */
+      color: var(--text); background: var(--bg);
+      border: 1px solid var(--border); border-radius: 12px;
+    }
+    button {
+      padding: 12px 18px; font-size: 16px; color: var(--user-text); background: var(--user);
+      border: 0; border-radius: 12px; cursor: pointer;
+    }
+    button:disabled, input:disabled { opacity: 0.55; cursor: not-allowed; }
+    #reset { display: none; margin: 0 20px 12px; background: transparent; color: var(--user); border: 1px solid var(--user); }
+    footer { padding: 8px 20px calc(10px + env(safe-area-inset-bottom)); color: var(--muted); font-size: 0.8rem; }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <h1>Eren Kara — Dijital İkiz</h1>
+      <p>Eren'in kariyeri hakkında bana soru sorabilirsin.</p>
+    </header>
+    <div id="log" aria-live="polite"></div>
+    <button id="reset" type="button">Yeni sohbet başlat</button>
+    <form id="form" autocomplete="off">
+      <input id="input" type="text" maxlength="500" placeholder="Bir soru yaz…" aria-label="Mesajın" required>
+      <button id="send" type="submit">Gönder</button>
+    </form>
+    <footer>
+      İletişim için bıraktığın ad ve e-posta yalnızca Eren'e Telegram ile iletilir; hiçbir yerde kaydedilmez.
+    </footer>
+  </main>
+  <script>
+    const MAX_MESSAGES = 20;
+    const WELCOME = "Merhaba! Ben Eren'in dijital ikiziyim. Deneyimi, projeleri ve çalışma tercihleri hakkında sorabilirsin.";
+    const LIMIT_REACHED = "Bu sohbet için mesaj limitine ulaşıldı. Yeni bir sohbet başlatabilirsin.";
+    const NETWORK_ERROR = "Bağlantı kurulamadı, lütfen tekrar dene.";
+
+    const log = document.getElementById("log");
+    const form = document.getElementById("form");
+    const input = document.getElementById("input");
+    const send = document.getElementById("send");
+    const reset = document.getElementById("reset");
+
+    let history = [];
+
+    function addBubble(role, text) {
+      const el = document.createElement("div");
+      el.className = "msg " + role;
+      el.textContent = text;
+      log.appendChild(el);
+      log.scrollTop = log.scrollHeight;
+      return el;
+    }
+
+    function setBusy(isBusy) {
+      input.disabled = isBusy;
+      send.disabled = isBusy;
+    }
+
+    function canSend() {
+      return history.length + 1 <= MAX_MESSAGES;
+    }
+
+    function showLimitIfReached() {
+      if (canSend()) return;
+      setBusy(true);
+      reset.style.display = "block";
+      addBubble("error", LIMIT_REACHED);
+    }
+
+    async function requestReply(messages) {
+      const response = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ messages }),
+      });
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(data.error || NETWORK_ERROR);
+      return data.reply;
+    }
+
+    async function onSubmit(event) {
+      event.preventDefault();
+      const text = input.value.trim();
+      if (!text || !canSend()) return;
+
+      const pending = [...history, { role: "user", content: text }];
+      addBubble("user", text);
+      input.value = "";
+      setBusy(true);
+      const waiting = addBubble("assistant pending", "Yazıyor…");
+
+      try {
+        const replyText = await requestReply(pending);
+        waiting.remove();
+        addBubble("assistant", replyText);
+        history = [...pending, { role: "assistant", content: replyText }];
+      } catch (error) {
+        waiting.remove();
+        addBubble("error", error.message || NETWORK_ERROR);
+        input.value = text;
+      } finally {
+        setBusy(false);
+        showLimitIfReached();
+        if (canSend()) input.focus();
+      }
+    }
+
+    function startOver() {
+      history = [];
+      log.replaceChildren();
+      addBubble("assistant", WELCOME);
+      reset.style.display = "none";
+      setBusy(false);
+      input.focus();
+    }
+
+    form.addEventListener("submit", onSubmit);
+    reset.addEventListener("click", startOver);
+    addBubble("assistant", WELCOME);
+  </script>
+</body>
+</html>

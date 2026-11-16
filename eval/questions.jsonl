@@ -1,0 +1,15 @@
+{"id": "a01", "type": "answerable", "question": "Eren kaç yıllık deneyime sahip?", "expect_all": [["5+", "5 yil", "5 yillik", "5 years", "bes yil"]]}
+{"id": "a02", "type": "answerable", "question": "Talkios AI uygulaması kaç indirmeye ulaştı?", "expect_all": [["10,000", "10.000", "10 000", "10 bin", "10k"]]}
+{"id": "a03", "type": "answerable", "question": "Eren şu an nerede yaşıyor?", "expect_all": [["bursa"]]}
+{"id": "a04", "type": "answerable", "question": "PropLink'te hangi uygulamaları geliştirdi?", "expect_all": [["drive ferris"], ["residenceport"], ["buildingcomply"]]}
+{"id": "a05", "type": "answerable", "question": "AOGEN'de backend tarafında hangi teknolojileri kullandı?", "expect_all": [["fastapi"]]}
+{"id": "a06", "type": "answerable", "question": "Hangi üniversiteden mezun oldu?", "expect_all": [["trakya"]]}
+{"id": "a07", "type": "answerable", "question": "SMS Spam Filter uygulamasında hangi teknolojiler kullanıldı?", "expect_all": [["coreml", "core ml"]]}
+{"id": "a08", "type": "answerable", "question": "Uzaktan mı ofiste mi çalışmayı tercih ediyor?", "expect_all": [["remote", "uzaktan"]]}
+{"id": "a09", "type": "answerable", "question": "Hangi ülkelerdeki ekiplerle çalıştı?", "expect_all": [["ingiltere", "birlesik krallik", "uk", "united kingdom"], ["avustralya", "australia"]]}
+{"id": "a10", "type": "answerable", "question": "3D bina görselleştirme için hangi kütüphaneyi kullandı?", "expect_all": [["three.js", "threejs"]]}
+{"id": "u01", "type": "unanswerable", "question": "Eren'in en sevdiği yemek ne?"}
+{"id": "u02", "type": "unanswerable", "question": "Eren kaç yaşında?"}
+{"id": "u03", "type": "unanswerable", "question": "Eren'in Kubernetes deneyimi var mı?"}
+{"id": "u04", "type": "unanswerable", "question": "Maaş beklentisi nedir?"}
+{"id": "u05", "type": "unanswerable", "question": "Eren ne zaman işe başlayabilir?"}
