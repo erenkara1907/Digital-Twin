@@ -12,7 +12,7 @@ from twin.prompt import build_system_prompt
 
 QUESTIONS_PATH = Path(__file__).resolve().parent / "questions.jsonl"
 UNKNOWN_TOOL = "record_unknown_question"
-ACK_PHRASES = ("bilmiyorum", "iletiyorum", "bilgim yok")
+ACK_PHRASES = ("don't know", "do not know", "passing it on", "forwarding")
 VALID_TYPES = ("answerable", "unanswerable")
 ANSWER_PREVIEW_CHARS = 300
 
@@ -42,7 +42,7 @@ def load_questions(path: Path = QUESTIONS_PATH) -> list[dict]:
 def _normalize(text: str) -> str:
     folded = unicodedata.normalize("NFKD", text.casefold())
     stripped = "".join(c for c in folded if not unicodedata.combining(c))
-    return stripped.replace("ı", "i")
+    return stripped.replace("ı", "i").replace("’", "'")
 
 
 def check(question: dict, answer: str, tool_calls: list[str]) -> tuple[bool, str]:
@@ -65,7 +65,7 @@ def _check_unanswerable(normalized: str, tool_calls: list[str]):
     if UNKNOWN_TOOL not in tool_calls:
         return False, f"{UNKNOWN_TOOL} was not called"
     if not any(phrase in normalized for phrase in ACK_PHRASES):
-        return False, "answer does not admit it does not know (bilmiyorum)"
+        return False, "answer does not admit it does not know the answer"
     return True, "ok"
 
 

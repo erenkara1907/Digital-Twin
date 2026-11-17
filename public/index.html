@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="tr">
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Eren Kara — Dijital İkiz</title>
+  <title>Eren Kara — Digital Twin</title>
   <style>
     :root {
       --bg: #f6f7f9; --panel: #ffffff; --text: #16181d; --muted: #6b7280;
@@ -30,7 +30,7 @@
     }
     header { padding: 16px 20px; border-bottom: 1px solid var(--border); }
     header h1 { margin: 0; font-size: 1.5rem; line-height: 1.25; }
-    header p { margin: 4px 0 0; color: var(--muted); font-size: 0.8rem; }
+    header p { margin: 4px 0 0; color: var(--muted); font-size: 0.75rem; }
     #log {
       flex: 1; overflow-y: auto; padding: 16px 20px;
       display: flex; flex-direction: column; gap: 10px;
@@ -55,30 +55,30 @@
     }
     button:disabled, input:disabled { opacity: 0.55; cursor: not-allowed; }
     #reset { display: none; margin: 0 20px 12px; background: transparent; color: var(--user); border: 1px solid var(--user); }
-    footer { padding: 8px 20px calc(10px + env(safe-area-inset-bottom)); color: var(--muted); font-size: 0.8rem; }
+    footer { padding: 8px 20px calc(10px + env(safe-area-inset-bottom)); color: var(--muted); font-size: 0.75rem; }
   </style>
 </head>
 <body>
   <main>
     <header>
-      <h1>Eren Kara — Dijital İkiz</h1>
-      <p>Eren'in kariyeri hakkında bana soru sorabilirsin.</p>
+      <h1>Eren Kara — Digital Twin</h1>
+      <p>Ask me anything about Eren's career.</p>
     </header>
     <div id="log" aria-live="polite"></div>
-    <button id="reset" type="button">Yeni sohbet başlat</button>
+    <button id="reset" type="button">Start a new chat</button>
     <form id="form" autocomplete="off">
-      <input id="input" type="text" maxlength="500" placeholder="Bir soru yaz…" aria-label="Mesajın" required>
-      <button id="send" type="submit">Gönder</button>
+      <input id="input" type="text" maxlength="500" placeholder="Ask a question…" aria-label="Your message" required>
+      <button id="send" type="submit">Send</button>
     </form>
     <footer>
-      İletişim için bıraktığın ad ve e-posta yalnızca Eren'e Telegram ile iletilir; hiçbir yerde kaydedilmez.
+      Any name and email you leave to get in touch is only forwarded to Eren via Telegram; it is never stored anywhere.
     </footer>
   </main>
   <script>
     const MAX_MESSAGES = 20;
-    const WELCOME = "Merhaba! Ben Eren'in dijital ikiziyim. Deneyimi, projeleri ve çalışma tercihleri hakkında sorabilirsin.";
-    const LIMIT_REACHED = "Bu sohbet için mesaj limitine ulaşıldı. Yeni bir sohbet başlatabilirsin.";
-    const NETWORK_ERROR = "Bağlantı kurulamadı, lütfen tekrar dene.";
+    const WELCOME = "Hi! I'm Eren's digital twin. Ask me about his experience, projects and work preferences.";
+    const LIMIT_REACHED = "This chat has reached its message limit. You can start a new chat.";
+    const NETWORK_ERROR = "Could not connect, please try again.";
 
     const log = document.getElementById("log");
     const form = document.getElementById("form");
@@ -133,7 +133,7 @@
       addBubble("user", text);
       input.value = "";
       setBusy(true);
-      const waiting = addBubble("assistant pending", "Yazıyor…");
+      const waiting = addBubble("assistant pending", "Typing…");
 
       try {
         const replyText = await requestReply(pending);

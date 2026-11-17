@@ -49,7 +49,7 @@ def _text_arg(args: dict, key: str, max_chars: int, required: bool = True) -> st
 
 def record_unknown_question(args: dict) -> None:
     question = _text_arg(args, "question", MAX_QUESTION_CHARS)
-    send_telegram(f"Cevaplanamayan soru:\n{question}")
+    send_telegram(f"Unanswered question:\n{question}")
 
 
 def record_contact(args: dict) -> None:
@@ -58,7 +58,7 @@ def record_contact(args: dict) -> None:
     if not EMAIL_PATTERN.match(email):
         raise ValueError("email is invalid")
     notes = _text_arg(args, "notes", MAX_NOTES_CHARS, required=False)
-    send_telegram(f"Yeni iletisim:\nAd: {name}\nE-posta: {email}\nNot: {notes or '-'}")
+    send_telegram(f"New contact:\nName: {name}\nEmail: {email}\nNotes: {notes or '-'}")
 
 
 _HANDLERS = {
@@ -72,15 +72,15 @@ TOOL_DEFINITIONS = [
         "function": {
             "name": "record_unknown_question",
             "description": (
-                "Metinlerde cevabi olmayan bir soruyu Eren'e bildirir. "
-                "Cevabini bilmedigin her soru icin cagir."
+                "Reports a question to Eren that the texts do not answer. "
+                "Call it for every question you cannot answer."
             ),
             "parameters": {
                 "type": "object",
                 "properties": {
                     "question": {
                         "type": "string",
-                        "description": "Ziyaretcinin sordugu soru",
+                        "description": "The question the visitor asked",
                     }
                 },
                 "required": ["question"],
@@ -92,16 +92,16 @@ TOOL_DEFINITIONS = [
         "function": {
             "name": "record_contact",
             "description": (
-                "Eren ile iletisime gecmek isteyen ziyaretcinin bilgisini Eren'e iletir."
+                "Passes on to Eren the details of a visitor who wants to get in touch."
             ),
             "parameters": {
                 "type": "object",
                 "properties": {
-                    "name": {"type": "string", "description": "Ziyaretcinin adi"},
-                    "email": {"type": "string", "description": "Ziyaretcinin e-postasi"},
+                    "name": {"type": "string", "description": "The visitor's name"},
+                    "email": {"type": "string", "description": "The visitor's email address"},
                     "notes": {
                         "type": "string",
-                        "description": "Ziyaretcinin iletmek istedigi not (opsiyonel)",
+                        "description": "A note the visitor wants to pass on (optional)",
                     },
                 },
                 "required": ["name", "email"],

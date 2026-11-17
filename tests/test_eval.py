@@ -6,7 +6,7 @@ import pytest
 from eval.run import check, load_questions, run_eval
 from twin import tools
 
-ACK = "bunu bilmiyorum, Eren'e iletiyorum"
+ACK = "I don't know that, I'm passing it on to Eren"
 
 
 def answerable(*groups):
@@ -99,10 +99,16 @@ def test_unanswerable_fails_without_tool_call():
 
 
 def test_unanswerable_fails_when_model_answers_instead_of_admitting():
-    ok, reason = check(UNANSWERABLE, "Pizza sever.", ["record_unknown_question"])
+    ok, reason = check(UNANSWERABLE, "He likes pizza.", ["record_unknown_question"])
 
     assert not ok
-    assert "bilmiyorum" in reason
+    assert "does not know" in reason
+
+
+def test_curly_apostrophe_acknowledgement_is_accepted():
+    ok, _ = check(UNANSWERABLE, "I don’t know that.", ["record_unknown_question"])
+
+    assert ok
 
 
 class ScriptedClient:

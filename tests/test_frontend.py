@@ -26,7 +26,8 @@ def test_page_posts_history_to_chat_endpoint():
 
 
 def test_page_states_contact_details_are_not_stored():
-    assert "kaydedilmez" in HTML
+    assert "never stored" in HTML
+    assert 'lang="en"' in HTML
 
 
 def test_page_enforces_twenty_message_limit():

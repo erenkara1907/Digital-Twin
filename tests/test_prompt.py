@@ -23,7 +23,7 @@ def test_prompt_states_the_five_rules(data_dir):
     assert "Eren Kara" in prompt
     assert "record_unknown_question" in prompt
     assert "record_contact" in prompt
-    assert "dilde" in prompt
+    assert "language" in prompt
 
 
 def test_data_comes_after_rules(data_dir):

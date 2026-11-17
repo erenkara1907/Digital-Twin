@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 OLLAMA_URL = "http://localhost:11434/v1"
 GROQ_URL = "https://api.groq.com/openai/v1"
 MAX_TOOL_ROUNDS = 3
-BUSY_MESSAGE = "Şu an yoğunluk var, biraz sonra tekrar deneyin."
+BUSY_MESSAGE = "We're experiencing high demand right now, please try again shortly."
 
 
 @dataclass(frozen=True)
@@ -113,7 +113,7 @@ def main(provider_name: str = "ollama") -> None:
     history: list[dict] = []
     while True:
         try:
-            question = input("sen> ").strip()
+            question = input("you> ").strip()
         except (EOFError, KeyboardInterrupt):
             return
         if not question:
@@ -123,7 +123,7 @@ def main(provider_name: str = "ollama") -> None:
             client, provider.model, system_prompt, history, provider.fallback_model
         )
         history = [*history, {"role": "assistant", "content": answer}]
-        print(f"ikiz> {answer}\n")
+        print(f"twin> {answer}\n")
 
 
 if __name__ == "__main__":

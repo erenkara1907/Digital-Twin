@@ -22,19 +22,20 @@ def test_record_unknown_question_notifies_owner(sent):
 
     assert result["status"] == "ok"
     assert len(sent) == 1
-    assert "Cevaplanamayan soru" in sent[0]
+    assert "Unanswered question" in sent[0]
     assert "En sevdigi yemek ne?" in sent[0]
 
 
 def test_record_contact_notifies_owner_with_all_fields(sent):
     result = run(
-        "record_contact", name="Ayse", email="ayse@example.com", notes="Flutter rolu"
+        "record_contact", name="Ayse", email="ayse@example.com", notes="Flutter role"
     )
 
     assert result["status"] == "ok"
     assert "Ayse" in sent[0]
     assert "ayse@example.com" in sent[0]
-    assert "Flutter rolu" in sent[0]
+    assert "New contact" in sent[0]
+    assert "Flutter role" in sent[0]
 
 
 def test_record_contact_notes_are_optional(sent):

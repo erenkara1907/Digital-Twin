@@ -1,15 +1,15 @@
-{"id": "a01", "type": "answerable", "question": "Eren kaç yıllık deneyime sahip?", "expect_all": [["5+", "5 yil", "5 yillik", "5 years", "bes yil"]]}
-{"id": "a02", "type": "answerable", "question": "Talkios AI uygulaması kaç indirmeye ulaştı?", "expect_all": [["10,000", "10.000", "10 000", "10 bin", "10k"]]}
-{"id": "a03", "type": "answerable", "question": "Eren şu an nerede yaşıyor?", "expect_all": [["bursa"]]}
-{"id": "a04", "type": "answerable", "question": "PropLink'te hangi uygulamaları geliştirdi?", "expect_all": [["drive ferris"], ["residenceport"], ["buildingcomply"]]}
-{"id": "a05", "type": "answerable", "question": "AOGEN'de backend tarafında hangi teknolojileri kullandı?", "expect_all": [["fastapi"]]}
-{"id": "a06", "type": "answerable", "question": "Hangi üniversiteden mezun oldu?", "expect_all": [["trakya"]]}
-{"id": "a07", "type": "answerable", "question": "SMS Spam Filter uygulamasında hangi teknolojiler kullanıldı?", "expect_all": [["coreml", "core ml"]]}
-{"id": "a08", "type": "answerable", "question": "Uzaktan mı ofiste mi çalışmayı tercih ediyor?", "expect_all": [["remote", "uzaktan"]]}
-{"id": "a09", "type": "answerable", "question": "Hangi ülkelerdeki ekiplerle çalıştı?", "expect_all": [["ingiltere", "birlesik krallik", "uk", "united kingdom"], ["avustralya", "australia"]]}
-{"id": "a10", "type": "answerable", "question": "3D bina görselleştirme için hangi kütüphaneyi kullandı?", "expect_all": [["three.js", "threejs"]]}
-{"id": "u01", "type": "unanswerable", "question": "Eren'in en sevdiği yemek ne?"}
-{"id": "u02", "type": "unanswerable", "question": "Eren kaç yaşında?"}
-{"id": "u03", "type": "unanswerable", "question": "Eren'in Kubernetes deneyimi var mı?"}
-{"id": "u04", "type": "unanswerable", "question": "Maaş beklentisi nedir?"}
-{"id": "u05", "type": "unanswerable", "question": "Eren ne zaman işe başlayabilir?"}
+{"id": "a01", "type": "answerable", "question": "How many years of experience does Eren have?", "expect_all": [["5+", "5 years", "five years"]]}
+{"id": "a02", "type": "answerable", "question": "How many downloads did the Talkios AI app reach?", "expect_all": [["10,000", "10.000", "10 000", "10k"]]}
+{"id": "a03", "type": "answerable", "question": "Where does Eren currently live?", "expect_all": [["bursa"]]}
+{"id": "a04", "type": "answerable", "question": "Which applications did he build at PropLink?", "expect_all": [["drive ferris"], ["residenceport"], ["buildingcomply"]]}
+{"id": "a05", "type": "answerable", "question": "Which backend technologies did he use at AOGEN?", "expect_all": [["fastapi"]]}
+{"id": "a06", "type": "answerable", "question": "Which university did he graduate from?", "expect_all": [["trakya"]]}
+{"id": "a07", "type": "answerable", "question": "Which technologies were used in the SMS Spam Filter app?", "expect_all": [["coreml", "core ml"]]}
+{"id": "a08", "type": "answerable", "question": "Does he prefer remote or office work?", "expect_all": [["remote"]]}
+{"id": "a09", "type": "answerable", "question": "Which countries were the teams he worked with based in?", "expect_all": [["united kingdom", "uk", "britain"], ["australia"]]}
+{"id": "a10", "type": "answerable", "question": "Which library did he use for 3D building visualization?", "expect_all": [["three.js", "threejs"]]}
+{"id": "u01", "type": "unanswerable", "question": "What is Eren's favorite food?"}
+{"id": "u02", "type": "unanswerable", "question": "How old is Eren?"}
+{"id": "u03", "type": "unanswerable", "question": "Does Eren have Kubernetes experience?"}
+{"id": "u04", "type": "unanswerable", "question": "What are his salary expectations?"}
+{"id": "u05", "type": "unanswerable", "question": "When can Eren start working?"}
