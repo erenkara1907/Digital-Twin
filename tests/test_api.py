@@ -67,6 +67,32 @@ def test_over_five_hundred_characters_rejected_without_echoing_input(client, cal
     assert calls == []
 
 
+def test_long_assistant_reply_in_history_is_accepted(client, calls):
+    messages = [
+        message("user", "first question"),
+        message("assistant", "a" * 3000),
+        message("user", "follow-up"),
+    ]
+
+    response = client.post("/api/chat", json={"messages": messages})
+
+    assert response.status_code == 200
+    assert calls == [messages]
+
+
+def test_absurdly_long_assistant_message_rejected(client, calls):
+    messages = [
+        message("user", "q"),
+        message("assistant", "a" * 4001),
+        message("user", "follow-up"),
+    ]
+
+    response = client.post("/api/chat", json={"messages": messages})
+
+    assert response.status_code == 400
+    assert calls == []
+
+
 @pytest.mark.parametrize(
     "body",
     [

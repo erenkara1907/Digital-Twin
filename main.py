@@ -20,17 +20,20 @@ load_dotenv()
 logger = logging.getLogger(__name__)
 
 MAX_MESSAGES = 20
-MAX_MESSAGE_CHARS = 500
+MAX_USER_MESSAGE_CHARS = 500
+# The browser echoes the model's earlier replies back in the history; they are
+# routinely longer than a visitor message, so they get a separate, larger cap.
+MAX_ASSISTANT_MESSAGE_CHARS = 4000
 DEFAULT_PROVIDER = "groq"
-INVALID_REQUEST_MESSAGE = "Geçersiz istek."
-BACKEND_ERROR_MESSAGE = "Şu an cevap veremiyorum, biraz sonra tekrar deneyin."
+INVALID_REQUEST_MESSAGE = "Invalid request."
+BACKEND_ERROR_MESSAGE = "I can't answer right now, please try again shortly."
 
 app = FastAPI(docs_url=None, redoc_url=None, openapi_url=None)
 
 
 class Message(BaseModel):
     role: Literal["user", "assistant"]
-    content: str = Field(max_length=MAX_MESSAGE_CHARS)
+    content: str
 
     @field_validator("content")
     @classmethod
@@ -38,6 +41,17 @@ class Message(BaseModel):
         if not value.strip():
             raise ValueError("content must not be blank")
         return value
+
+    @model_validator(mode="after")
+    def content_must_fit_role_limit(self) -> "Message":
+        limit = (
+            MAX_USER_MESSAGE_CHARS
+            if self.role == "user"
+            else MAX_ASSISTANT_MESSAGE_CHARS
+        )
+        if len(self.content) > limit:
+            raise ValueError(f"{self.role} message is longer than {limit} characters")
+        return self
 
 
 class ChatRequest(BaseModel):
